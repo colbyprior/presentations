@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<!--
+  Copyright 2010 Google Inc.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+
+  Original slides: Marcin Wichary (mwichary@google.com)
+  Modifications: Ernest Delgado (ernestd@google.com)
+                 Alex Russell (slightlyoff@chromium.org)
+
+  landslide modifications: Adam Zapletal (adamzap@gmail.com)
+                           Nicolas Perriault (nperriault@gmail.com)
+-->
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>AWS Introduction</title>
+    <!-- Styles -->
+    
+    <link rel="stylesheet" media="print" href="file:///usr/local/lib/python2.7/dist-packages/landslide/themes/default/css/print.css">
+    <link rel="stylesheet" media="screen, projection" href="file:///usr/local/lib/python2.7/dist-packages/landslide/themes/default/css/screen.css">
+    
+    
+    <!-- /Styles -->
+    <!-- Javascripts -->
+    
+    <script type="text/javascript" src="file:///usr/local/lib/python2.7/dist-packages/landslide/themes/default/js/slides.js"></script>
+    
+    
+    
+    <!-- /Javascripts -->
+</head>
+<body>
+  <div id="blank"></div>
+  <div class="presentation">
+    <div id="current_presenter_notes">
+      <div id="presenter_note"></div>
+    </div>
+    <div class="slides">
+      
+      <!-- slide source: aws_introduction.md -->
+      <div class="slide-wrapper">
+        <div class="slide slide-1">
+          <div class="inner">
+            
+            <header><h1>AWS Introduction</h1></header>
+            
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="aws_introduction.md">aws_introduction.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              1/11
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: aws_introduction.md -->
+      <div class="slide-wrapper">
+        <div class="slide slide-2">
+          <div class="inner">
+            
+            <header><h1>Ec2 (Servers)</h1></header>
+            
+            
+            <section><ul>
+<li>Server charged based off instance size, per minute.</li>
+<li>Set up using local account with preloaded ssh key.</li>
+<li>Can have routine filesystem snapshots however most storage is ephemeral.</li>
+<li>Ec2 can have "User Data" which is code that is run on creation.</li>
+</ul></section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="aws_introduction.md">aws_introduction.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              2/11
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: aws_introduction.md -->
+      <div class="slide-wrapper">
+        <div class="slide has_code slide-3">
+          <div class="inner">
+            
+            <header><h1>Cloudformation (Infrastructure as code)</h1></header>
+            
+            
+            <section><p>Cloudformation allows you to define your infrastructure in a yaml file for automated provisioning and updating.</p>
+<p>It also allows you to pass input parameters, reference objects and substitute variables.</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="l l-Scalar l-Scalar-Plain">AWSTemplateFormatVersion</span><span class="p p-Indicator">:</span> <span class="s">&quot;2010-09-09&quot;</span>
+<span class="lineno"> 2 </span><span class="l l-Scalar l-Scalar-Plain">Description</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Mailman deploy cloudformation</span>
+<span class="lineno"> 3 </span>
+<span class="lineno"> 4 </span><span class="l l-Scalar l-Scalar-Plain">Parameters</span><span class="p p-Indicator">:</span>
+<span class="lineno"> 5 </span>  <span class="l l-Scalar l-Scalar-Plain">Subnet</span><span class="p p-Indicator">:</span>
+<span class="lineno"> 6 </span>    <span class="l l-Scalar l-Scalar-Plain">Type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">List&lt;AWS::EC2::Subnet::Id&gt;</span>
+<span class="lineno"> 7 </span>    <span class="l l-Scalar l-Scalar-Plain">Description</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Subnet to deploy Ec2 in</span>
+<span class="lineno"> 8 </span>
+<span class="lineno"> 9 </span><span class="l l-Scalar l-Scalar-Plain">Resources</span><span class="p p-Indicator">:</span>
+<span class="lineno">10 </span>  <span class="l l-Scalar l-Scalar-Plain">Ec2Instance</span><span class="p p-Indicator">:</span> 
+<span class="lineno">11 </span>    <span class="l l-Scalar l-Scalar-Plain">Type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">AWS::EC2::Instance</span>
+<span class="lineno">12 </span>    <span class="l l-Scalar l-Scalar-Plain">Properties</span><span class="p p-Indicator">:</span> 
+<span class="lineno">13 </span>      <span class="l l-Scalar l-Scalar-Plain">ImageId</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">ami-65a60007</span>
+<span class="lineno">14 </span>      <span class="l l-Scalar l-Scalar-Plain">KeyName</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">my-ssh-key</span>
+<span class="lineno">15 </span>      <span class="l l-Scalar l-Scalar-Plain">InstanceType</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">t2.micro</span>
+<span class="lineno">16 </span>      <span class="l l-Scalar l-Scalar-Plain">SubnetId</span><span class="p p-Indicator">:</span> <span class="kt">!Ref</span> <span class="l l-Scalar l-Scalar-Plain">Subnet</span>
+<span class="lineno">17 </span>
+<span class="lineno">18 </span><span class="l l-Scalar l-Scalar-Plain">Outputs</span><span class="p p-Indicator">:</span>
+<span class="lineno">19 </span>  <span class="l l-Scalar l-Scalar-Plain">MyInstance</span><span class="p p-Indicator">:</span>
+<span class="lineno">20 </span>    <span class="l l-Scalar l-Scalar-Plain">Description</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">My Ec2 instance</span>
+<span class="lineno">21 </span>    <span class="l l-Scalar l-Scalar-Plain">Value</span><span class="p p-Indicator">:</span> <span class="kt">!Ref</span> <span class="l l-Scalar l-Scalar-Plain">Ec2Instance</span>
+<span class="lineno">22 </span>    <span class="l l-Scalar l-Scalar-Plain">Export</span><span class="p p-Indicator">:</span>
+<span class="lineno">23 </span>      <span class="l l-Scalar l-Scalar-Plain">Name</span><span class="p p-Indicator">:</span> <span class="kt">!Sub</span> <span class="s">&quot;${AWS::StackName}-MyInstance&quot;</span>
+</pre></div>
+</section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="aws_introduction.md">aws_introduction.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              3/11
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: aws_introduction.md -->
+      <div class="slide-wrapper">
+        <div class="slide has_code slide-4">
+          <div class="inner">
+            
+            <header><h1>S3 (File storage)</h1></header>
+            
+            
+            <section><ul>
+<li>S3 is for flat file storage.</li>
+<li>It is not a NAS.</li>
+<li>S3 can have webhosting for static content.</li>
+<li>Versioning can be enabled on a S3 bucket.</li>
+<li>Server side encryption can be enabled on a S3 bucket.</li>
+</ul>
+<p>Cloudformation S3 resource</p>
+<div class="highlight"><pre><span></span><span class="lineno">1 </span><span class="l l-Scalar l-Scalar-Plain">MyBucket</span><span class="p p-Indicator">:</span>
+<span class="lineno">2 </span>  <span class="l l-Scalar l-Scalar-Plain">Type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">AWS::S3::Bucket</span>
+<span class="lineno">3 </span>  <span class="l l-Scalar l-Scalar-Plain">Properties</span><span class="p p-Indicator">:</span> 
+<span class="lineno">4 </span>    <span class="l l-Scalar l-Scalar-Plain">BucketName</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">my_bucket</span>
+</pre></div>
+</section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="aws_introduction.md">aws_introduction.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              4/11
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: aws_introduction.md -->
+      <div class="slide-wrapper">
+        <div class="slide has_code slide-5">
+          <div class="inner">
+            
+            <header><h1>Bringing Ec2 and S3 together</h1></header>
+            
+            
+            <section><ul>
+<li>The AWS CLI can perform automation in User Data scripts.</li>
+<li><code>169.254.169.254</code> is a special IP used to get information about your instance.</li>
+</ul>
+<p>Ec2 instance cloudformation to run ansible on localhost</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="l l-Scalar l-Scalar-Plain">Type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">AWS::EC2::Instance</span>
+<span class="lineno"> 2 </span><span class="l l-Scalar l-Scalar-Plain">Properties</span><span class="p p-Indicator">:</span>
+<span class="lineno"> 3 </span>  <span class="l l-Scalar l-Scalar-Plain">ImageId</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">ami-65a60007</span>
+<span class="lineno"> 4 </span>  <span class="l l-Scalar l-Scalar-Plain">KeyName</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">my-ssh-key</span>
+<span class="lineno"> 5 </span>  <span class="l l-Scalar l-Scalar-Plain">InstanceType</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">t2.micro</span>
+<span class="lineno"> 6 </span>  <span class="l l-Scalar l-Scalar-Plain">SubnetId</span><span class="p p-Indicator">:</span> <span class="kt">!Ref</span> <span class="l l-Scalar l-Scalar-Plain">Subnet</span>
+<span class="lineno"> 7 </span>  <span class="l l-Scalar l-Scalar-Plain">UserData</span><span class="p p-Indicator">:</span>
+<span class="lineno"> 8 </span>    <span class="s">&quot;Fn::Base64&quot;</span><span class="p p-Indicator">:</span>
+<span class="lineno"> 9 </span>      <span class="kt">!Sub</span>
+<span class="lineno">10 </span>       <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+<span class="lineno">11 </span>        <span class="no">#!/bin/bash</span>
+<span class="lineno">12 </span>        <span class="no">TMP_INSTALL_DIR=&#39;/etc/setup-files&#39;</span>
+<span class="lineno">13 </span>        <span class="no">CONFIG_BUCKET=&#39;${ConfigBucket}&#39;</span>
+<span class="lineno">14 </span>        <span class="no">apt update -y</span>
+<span class="lineno">15 </span>        <span class="no">apt install awscli jq ansible -y</span>
+<span class="lineno">16 </span>
+<span class="lineno">17 </span>        <span class="no">REGION=$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | jq .region -r)</span>
+<span class="lineno">18 </span>        <span class="no">aws configure set default.region $REGION</span>
+<span class="lineno">19 </span>        <span class="no">mkdir $TMP_INSTALL_DIR</span>
+<span class="lineno">20 </span>        <span class="no">aws s3 cp s3://$CONFIG_BUCKET/ $TMP_INSTALL_DIR --recursive</span>
+<span class="lineno">21 </span>        <span class="no">ansible-playbook $TMP_INSTALL_DIR/ansible.yml --connection=local</span>
+</pre></div>
+</section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="aws_introduction.md">aws_introduction.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              5/11
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: aws_introduction.md -->
+      <div class="slide-wrapper">
+        <div class="slide has_code slide-6">
+          <div class="inner">
+            
+            <header><h1>IAM roles (Access control)</h1></header>
+            
+            
+            <section><ul>
+<li>IAM roles can be applied to users (via SAML) and Ec2 instances (and more).</li>
+<li>IAM policies can be attached to roles to dictate what access the role has.</li>
+</ul>
+<p>Cloudformation for IAM role to access S3 bucket</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="l l-Scalar l-Scalar-Plain">Type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">AWS::IAM::Role</span>
+<span class="lineno"> 2 </span><span class="l l-Scalar l-Scalar-Plain">Properties</span><span class="p p-Indicator">:</span>
+<span class="lineno"> 3 </span>  <span class="l l-Scalar l-Scalar-Plain">AssumeRolePolicyDocument</span><span class="p p-Indicator">:</span>
+<span class="lineno"> 4 </span>    <span class="l l-Scalar l-Scalar-Plain">Version</span><span class="p p-Indicator">:</span> <span class="s">&quot;2012-10-17&quot;</span>
+<span class="lineno"> 5 </span>    <span class="l l-Scalar l-Scalar-Plain">Statement</span><span class="p p-Indicator">:</span>
+<span class="lineno"> 6 </span>      <span class="p p-Indicator">-</span> 
+<span class="lineno"> 7 </span>        <span class="l l-Scalar l-Scalar-Plain">Effect</span><span class="p p-Indicator">:</span> <span class="s">&quot;Allow&quot;</span>
+<span class="lineno"> 8 </span>        <span class="l l-Scalar l-Scalar-Plain">Principal</span><span class="p p-Indicator">:</span>
+<span class="lineno"> 9 </span>          <span class="l l-Scalar l-Scalar-Plain">Service</span><span class="p p-Indicator">:</span>
+<span class="lineno">10 </span>            <span class="p p-Indicator">-</span> <span class="s">&quot;ec2.amazonaws.com&quot;</span>
+<span class="lineno">11 </span>        <span class="l l-Scalar l-Scalar-Plain">Action</span><span class="p p-Indicator">:</span>
+<span class="lineno">12 </span>          <span class="p p-Indicator">-</span> <span class="s">&quot;sts:AssumeRole&quot;</span>
+<span class="lineno">13 </span>  <span class="l l-Scalar l-Scalar-Plain">Policies</span><span class="p p-Indicator">:</span>
+<span class="lineno">14 </span>    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">PolicyName</span><span class="p p-Indicator">:</span> <span class="s">&quot;readMyBucket&quot;</span>
+<span class="lineno">15 </span>      <span class="l l-Scalar l-Scalar-Plain">PolicyDocument</span><span class="p p-Indicator">:</span>
+<span class="lineno">16 </span>        <span class="l l-Scalar l-Scalar-Plain">Version</span><span class="p p-Indicator">:</span> <span class="s">&quot;2012-10-17&quot;</span>
+<span class="lineno">17 </span>        <span class="l l-Scalar l-Scalar-Plain">Statement</span><span class="p p-Indicator">:</span>
+<span class="lineno">18 </span>          <span class="p p-Indicator">-</span> 
+<span class="lineno">19 </span>            <span class="l l-Scalar l-Scalar-Plain">Effect</span><span class="p p-Indicator">:</span> <span class="s">&quot;Allow&quot;</span>
+<span class="lineno">20 </span>            <span class="l l-Scalar l-Scalar-Plain">Action</span><span class="p p-Indicator">:</span>
+<span class="lineno">21 </span>              <span class="p p-Indicator">-</span> <span class="s">&quot;s3:ListBucket&quot;</span>
+<span class="lineno">22 </span>              <span class="p p-Indicator">-</span> <span class="s">&quot;s3:GetObject&quot;</span>
+<span class="lineno">23 </span>            <span class="l l-Scalar l-Scalar-Plain">Resource</span><span class="p p-Indicator">:</span>
+<span class="lineno">24 </span>              <span class="p p-Indicator">-</span> <span class="kt">!Join</span> <span class="p p-Indicator">[</span> <span class="s">&quot;&quot;</span><span class="p p-Indicator">,</span> <span class="p p-Indicator">[</span> <span class="s">&quot;arn:aws:s3:::&quot;</span><span class="p p-Indicator">,</span> <span class="nv">Ref</span><span class="p p-Indicator">:</span> <span class="nv">MyBucket</span><span class="p p-Indicator">,</span> <span class="s">&quot;/*&quot;</span> <span class="p p-Indicator">]</span> <span class="p p-Indicator">]</span>
+</pre></div>
+</section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="aws_introduction.md">aws_introduction.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              6/11
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: aws_introduction.md -->
+      <div class="slide-wrapper">
+        <div class="slide has_code slide-7">
+          <div class="inner">
+            
+            <header><h1>RDS (Databases)</h1></header>
+            
+            
+            <section><ul>
+<li>RDS has auto backup to S3 features.</li>
+<li>RDS can also perform auto upgrades for minor versions.</li>
+<li>RDS can create SQL slaves in different availability zones.</li>
+</ul>
+<p>RDS cloudformation</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="l l-Scalar l-Scalar-Plain">Type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">AWS::RDS::DBInstance</span>
+<span class="lineno"> 2 </span><span class="l l-Scalar l-Scalar-Plain">Properties</span><span class="p p-Indicator">:</span>
+<span class="lineno"> 3 </span>  <span class="l l-Scalar l-Scalar-Plain">DBName</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">mydb</span>
+<span class="lineno"> 4 </span>  <span class="l l-Scalar l-Scalar-Plain">DBSubnetGroupName</span><span class="p p-Indicator">:</span> <span class="kt">!Ref</span> <span class="l l-Scalar l-Scalar-Plain">Subnet</span>
+<span class="lineno"> 5 </span>  <span class="l l-Scalar l-Scalar-Plain">AllocatedStorage</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">5</span>
+<span class="lineno"> 6 </span>  <span class="l l-Scalar l-Scalar-Plain">AutoMinorVersionUpgrade</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="lineno"> 7 </span>  <span class="l l-Scalar l-Scalar-Plain">DBInstanceClass</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">db.t2.micro</span>
+<span class="lineno"> 8 </span>  <span class="l l-Scalar l-Scalar-Plain">Engine</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">MariaDB</span>
+<span class="lineno"> 9 </span>  <span class="l l-Scalar l-Scalar-Plain">MasterUsername</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">db_user</span>
+<span class="lineno">10 </span>  <span class="l l-Scalar l-Scalar-Plain">MasterUserPassword</span><span class="p p-Indicator">:</span> <span class="kt">!Ref</span> <span class="l l-Scalar l-Scalar-Plain">DBPass</span>
+<span class="lineno">11 </span>  <span class="l l-Scalar l-Scalar-Plain">PubliclyAccessible</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="lineno">12 </span>  <span class="l l-Scalar l-Scalar-Plain">DBInstanceIdentifier</span><span class="p p-Indicator">:</span> <span class="kt">!Ref</span> <span class="l l-Scalar l-Scalar-Plain">AWS::StackName</span>
+<span class="lineno">13 </span>  <span class="l l-Scalar l-Scalar-Plain">BackupRetentionPeriod</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">7</span>
+<span class="lineno">14 </span>  <span class="l l-Scalar l-Scalar-Plain">MultiAZ</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">True</span>
+</pre></div>
+</section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="aws_introduction.md">aws_introduction.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              7/11
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: aws_introduction.md -->
+      <div class="slide-wrapper">
+        <div class="slide has_code slide-8">
+          <div class="inner">
+            
+            <header><h1>Security groups (Firewall)</h1></header>
+            
+            
+            <section><p>Cloudformation for ssh access to a Ec2 and database access</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="l l-Scalar l-Scalar-Plain">Ec2Group</span><span class="p p-Indicator">:</span>
+<span class="lineno"> 2 </span> <span class="l l-Scalar l-Scalar-Plain">Type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">AWS::EC2::SecurityGroup</span>
+<span class="lineno"> 3 </span> <span class="l l-Scalar l-Scalar-Plain">Properties</span><span class="p p-Indicator">:</span>
+<span class="lineno"> 4 </span>   <span class="l l-Scalar l-Scalar-Plain">GroupDescription</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">This is the security group management access</span>
+<span class="lineno"> 5 </span>   <span class="l l-Scalar l-Scalar-Plain">VpcId</span><span class="p p-Indicator">:</span> <span class="kt">!Ref</span> <span class="l l-Scalar l-Scalar-Plain">VpcId</span>
+<span class="lineno"> 6 </span>   <span class="l l-Scalar l-Scalar-Plain">SecurityGroupIngress</span><span class="p p-Indicator">:</span>
+<span class="lineno"> 7 </span>     <span class="p p-Indicator">-</span> 
+<span class="lineno"> 8 </span>      <span class="l l-Scalar l-Scalar-Plain">IpProtocol</span><span class="p p-Indicator">:</span> <span class="s">&quot;tcp&quot;</span>
+<span class="lineno"> 9 </span>      <span class="l l-Scalar l-Scalar-Plain">FromPort</span><span class="p p-Indicator">:</span> <span class="s">&quot;22&quot;</span>
+<span class="lineno">10 </span>      <span class="l l-Scalar l-Scalar-Plain">ToPort</span><span class="p p-Indicator">:</span> <span class="s">&quot;22&quot;</span>
+<span class="lineno">11 </span>      <span class="l l-Scalar l-Scalar-Plain">CidrIp</span><span class="p p-Indicator">:</span> <span class="kt">!Ref</span> <span class="l l-Scalar l-Scalar-Plain">ManagementRange</span>
+<span class="lineno">12 </span>
+<span class="lineno">13 </span><span class="l l-Scalar l-Scalar-Plain">RDSGroup</span><span class="p p-Indicator">:</span>
+<span class="lineno">14 </span>  <span class="l l-Scalar l-Scalar-Plain">Type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">AWS::EC2::SecurityGroup</span>
+<span class="lineno">15 </span>  <span class="l l-Scalar l-Scalar-Plain">DependsOn</span><span class="p p-Indicator">:</span>
+<span class="lineno">16 </span>   <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">Ec2Group</span>
+<span class="lineno">17 </span>  <span class="l l-Scalar l-Scalar-Plain">Properties</span><span class="p p-Indicator">:</span>
+<span class="lineno">18 </span>    <span class="l l-Scalar l-Scalar-Plain">VpcId</span><span class="p p-Indicator">:</span> <span class="kt">!Ref</span> <span class="l l-Scalar l-Scalar-Plain">VpcId</span>
+<span class="lineno">19 </span>    <span class="l l-Scalar l-Scalar-Plain">SecurityGroupIngress</span><span class="p p-Indicator">:</span>
+<span class="lineno">20 </span>      <span class="p p-Indicator">-</span>
+<span class="lineno">21 </span>       <span class="l l-Scalar l-Scalar-Plain">IpProtocol</span><span class="p p-Indicator">:</span> <span class="s">&quot;tcp&quot;</span>
+<span class="lineno">22 </span>       <span class="l l-Scalar l-Scalar-Plain">FromPort</span><span class="p p-Indicator">:</span> <span class="s">&quot;3306&quot;</span>
+<span class="lineno">23 </span>       <span class="l l-Scalar l-Scalar-Plain">ToPort</span><span class="p p-Indicator">:</span> <span class="s">&quot;3306&quot;</span>
+<span class="lineno">24 </span>       <span class="l l-Scalar l-Scalar-Plain">SourceSecurityGroupId</span><span class="p p-Indicator">:</span> <span class="kt">!GetAtt</span> <span class="l l-Scalar l-Scalar-Plain">Ec2Group.GroupId</span>
+</pre></div>
+</section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="aws_introduction.md">aws_introduction.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              8/11
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: aws_introduction.md -->
+      <div class="slide-wrapper">
+        <div class="slide has_code slide-9">
+          <div class="inner">
+            
+            <header><h1>Horizontal Scaling</h1></header>
+            
+            
+            <section><ul>
+<li>Ec2 instances can deployed in autoscaling groups.</li>
+<li>Load balancers can attach Ec2 instances from autoscaling using health checks.</li>
+</ul>
+<p>Example of a load balancer target group that an auto scaling group would reference.</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="l l-Scalar l-Scalar-Plain">Type</span><span class="p p-Indicator">:</span> <span class="s">&quot;AWS::ElasticLoadBalancingV2::TargetGroup&quot;</span>
+<span class="lineno"> 2 </span><span class="l l-Scalar l-Scalar-Plain">Properties</span><span class="p p-Indicator">:</span>
+<span class="lineno"> 3 </span>  <span class="l l-Scalar l-Scalar-Plain">HealthCheckIntervalSeconds</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">30</span>
+<span class="lineno"> 4 </span>  <span class="l l-Scalar l-Scalar-Plain">HealthCheckPath</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">/health-check.php</span>
+<span class="lineno"> 5 </span>  <span class="l l-Scalar l-Scalar-Plain">HealthCheckPort</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">80</span>
+<span class="lineno"> 6 </span>  <span class="l l-Scalar l-Scalar-Plain">HealthCheckProtocol</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">HTTP</span>
+<span class="lineno"> 7 </span>  <span class="l l-Scalar l-Scalar-Plain">HealthCheckTimeoutSeconds</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">28</span>
+<span class="lineno"> 8 </span>  <span class="l l-Scalar l-Scalar-Plain">HealthyThresholdCount</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="lineno"> 9 </span>  <span class="l l-Scalar l-Scalar-Plain">Matcher</span><span class="p p-Indicator">:</span>
+<span class="lineno">10 </span>    <span class="l l-Scalar l-Scalar-Plain">HttpCode</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">200</span>
+<span class="lineno">11 </span>  <span class="l l-Scalar l-Scalar-Plain">Name</span><span class="p p-Indicator">:</span> <span class="kt">!Ref</span> <span class="l l-Scalar l-Scalar-Plain">AWS::StackName</span>
+<span class="lineno">12 </span>  <span class="l l-Scalar l-Scalar-Plain">Port</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">80</span>
+<span class="lineno">13 </span>  <span class="l l-Scalar l-Scalar-Plain">Protocol</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">HTTP</span>
+<span class="lineno">14 </span>  <span class="l l-Scalar l-Scalar-Plain">TargetGroupAttributes</span><span class="p p-Indicator">:</span>
+<span class="lineno">15 </span>    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">Key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">stickiness.type</span>
+<span class="lineno">16 </span>      <span class="l l-Scalar l-Scalar-Plain">Value</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">lb_cookie</span>
+<span class="lineno">17 </span>    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">Key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">stickiness.enabled</span>
+<span class="lineno">18 </span>      <span class="l l-Scalar l-Scalar-Plain">Value</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="lineno">19 </span>    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">Key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">stickiness.lb_cookie.duration_seconds</span>
+<span class="lineno">20 </span>      <span class="l l-Scalar l-Scalar-Plain">Value</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">3600</span>
+<span class="lineno">21 </span>  <span class="l l-Scalar l-Scalar-Plain">UnhealthyThresholdCount</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="lineno">22 </span>  <span class="l l-Scalar l-Scalar-Plain">VpcId</span><span class="p p-Indicator">:</span> <span class="kt">!Ref</span> <span class="l l-Scalar l-Scalar-Plain">VpcId</span>
+</pre></div>
+</section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="aws_introduction.md">aws_introduction.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              9/11
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: aws_introduction.md -->
+      <div class="slide-wrapper">
+        <div class="slide slide-10">
+          <div class="inner">
+            
+            <header><h1>VPC (Networking)</h1></header>
+            
+            
+            <section><ul>
+<li>A VPC can be split into tiers with different route tables.</li>
+<li>Each tier has three subnets in different physical locations.</li>
+<li>There can also be private VPN or direct connect links to VPC's.</li>
+</ul>
+<p><img alt="awsvpc" src="https://docs.aws.amazon.com/directconnect/latest/UserGuide/images/dx-gateway-diagram.png" /></p></section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="aws_introduction.md">aws_introduction.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              10/11
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: aws_introduction.md -->
+      <div class="slide-wrapper">
+        <div class="slide slide-11">
+          <div class="inner">
+            
+            <header><h1><img alt="awslamp" src="https://d1.awsstatic.com/partner-network/QuickStart/datasheets/drupal-architecture-on-the-aws-cloud.05b8a1305f655d046dc404c5b5079401c0030e1c.png" /></h1></header>
+            
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="aws_introduction.md">aws_introduction.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              11/11
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  
+  <div id="toc" class="sidebar hidden">
+    <h2>Table of Contents</h2>
+    <table>
+      <caption>Table of Contents</caption>
+      
+      <tr id="toc-row-1">
+        <th><a href="#slide1">AWS Introduction</a></th>
+        <td><a href="#slide1">1</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-2">
+        <th><a href="#slide2">Ec2 (Servers)</a></th>
+        <td><a href="#slide2">2</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-3">
+        <th><a href="#slide3">Cloudformation (Infrastructure as code)</a></th>
+        <td><a href="#slide3">3</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-4">
+        <th><a href="#slide4">S3 (File storage)</a></th>
+        <td><a href="#slide4">4</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-5">
+        <th><a href="#slide5">Bringing Ec2 and S3 together</a></th>
+        <td><a href="#slide5">5</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-6">
+        <th><a href="#slide6">IAM roles (Access control)</a></th>
+        <td><a href="#slide6">6</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-7">
+        <th><a href="#slide7">RDS (Databases)</a></th>
+        <td><a href="#slide7">7</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-8">
+        <th><a href="#slide8">Security groups (Firewall)</a></th>
+        <td><a href="#slide8">8</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-9">
+        <th><a href="#slide9">Horizontal Scaling</a></th>
+        <td><a href="#slide9">9</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-10">
+        <th><a href="#slide10">VPC (Networking)</a></th>
+        <td><a href="#slide10">10</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-11">
+        <th><a href="#slide11"><img alt="awslamp" src="https://d1.awsstatic.com/partner-network/QuickStart/datasheets/drupal-architecture-on-the-aws-cloud.05b8a1305f655d046dc404c5b5079401c0030e1c.png" /></a></th>
+        <td><a href="#slide11">11</a></td>
+      </tr>
+      
+      
+    </table>
+  </div>
+  
+  <div id="help" class="sidebar hidden">
+    <h2>Help</h2>
+    <table>
+      <caption>Help</caption>
+      <tr>
+        <th>Table of Contents</th>
+        <td>t</td>
+      </tr>
+      <tr>
+        <th>Exposé</th>
+        <td>ESC</td>
+      </tr>
+      <tr>
+        <th>Full screen slides</th>
+        <td>e</td>
+      </tr>
+      <tr>
+        <th>Presenter View</th>
+        <td>p</td>
+      </tr>
+      <tr>
+        <th>Source Files</th>
+        <td>s</td>
+      </tr>
+      <tr>
+        <th>Slide Numbers</th>
+        <td>n</td>
+      </tr>
+      <tr>
+        <th>Toggle screen blanking</th>
+        <td>b</td>
+      </tr>
+      <tr>
+        <th>Show/hide slide context</th>
+        <td>c</td>
+      </tr>
+      <tr>
+        <th>Notes</th>
+        <td>2</td>
+      </tr>
+      <tr>
+        <th>Help</th>
+        <td>h</td>
+      </tr>
+    </table>
+  </div>
+  <script>main()</script>
+</body>
+</html>
